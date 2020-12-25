@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>324322308824-cj440d90tgcuikk133kc4onbvsibtt0j.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.324322308824-cj440d90tgcuikk133kc4onbvsibtt0j</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAxrWQ09lIXOC2Kr2wLcTHMkNLVJGhG5Ig</string>
+	<key>GCM_SENDER_ID</key>
+	<string>324322308824</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.terrificLightsFinal1</string>
+	<key>PROJECT_ID</key>
+	<string>terrific-lights</string>
+	<key>STORAGE_BUCKET</key>
+	<string>terrific-lights.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:324322308824:ios:c8d67157131b94aa101dad</string>
+	<key>DATABASE_URL</key>
+	<string>https://terrific-lights.firebaseio.com</string>
+</dict>
+</plist>
