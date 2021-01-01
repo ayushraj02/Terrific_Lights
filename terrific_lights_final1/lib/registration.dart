@@ -4,7 +4,7 @@ import 'package:terrific_lights_final1/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:terrific_lights_final1/patient_info_fill.dart';
 import 'package:terrific_lights_final1/patient_list.dart';
-//import 'package:terrific_lights_final1/driver_map.dart.dart';
+import 'package:terrific_lights_final1/MapsDemo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 class registration extends StatefulWidget {
   static const String id = 'registration_screen';
@@ -43,13 +43,19 @@ class _registrationState extends State<registration> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                SizedBox(
+                  height : 30.0,
+                ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
+                      SizedBox(
+                        height : 10.0,
+                      ),
                       Text(
-                        'Sign Up',
+                        ' Sign Up',
                         style: TextStyle(
                             fontSize: 25.0, fontWeight: FontWeight.bold),
                       ),
@@ -59,7 +65,7 @@ class _registrationState extends State<registration> {
                 RadioListTile(
                   value: 1,
                   groupValue: selectedRadio,
-                  title: Text("Doctor"),
+                  title: Text("Doctor" , style: TextStyle(fontSize: 19.0)),
                   activeColor: Colors.green,
                   onChanged: (val) {
                     setSelectedRadio(val);
@@ -69,8 +75,8 @@ class _registrationState extends State<registration> {
                 RadioListTile(
                   value: 2,
                   groupValue: selectedRadio,
-                  title: Text("EMT"),
-                  activeColor: Colors.blue,
+                  title: Text("EMT", style: TextStyle(fontSize: 19.0)),
+                  activeColor: Colors.red,
                   onChanged: (val) {
                     setSelectedRadio(val);
                   },
@@ -78,8 +84,8 @@ class _registrationState extends State<registration> {
                 RadioListTile(
                   value: 3,
                   groupValue: selectedRadio,
-                  title: Text("Driver"),
-                  activeColor: Colors.blue,
+                  title: Text("Driver", style: TextStyle(fontSize: 19.0)),
+                  activeColor: Colors.red,
                   onChanged: (val) {
                     setSelectedRadio(val);
                   },
@@ -93,7 +99,7 @@ class _registrationState extends State<registration> {
                       hintText: 'Email',
                       suffixIcon: Icon(Icons.email),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
+                        borderRadius: BorderRadius.circular(30.0),
                       ),
                     ),
                     onChanged: (value) {
@@ -109,7 +115,7 @@ class _registrationState extends State<registration> {
                       hintText: 'Password',
                       suffixIcon: Icon(Icons.visibility_off),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
+                        borderRadius: BorderRadius.circular(30.0),
                       ),
                     ),
                     onChanged: (value) {
@@ -125,7 +131,7 @@ class _registrationState extends State<registration> {
                       hintText: 'Confirm Password',
                       suffixIcon: Icon(Icons.visibility_off),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
+                        borderRadius: BorderRadius.circular(30.0),
                       ),
                     ),
                     onChanged: (value) {
@@ -143,9 +149,9 @@ class _registrationState extends State<registration> {
                     obscureText: true,
                     decoration: InputDecoration(
                       hintText: 'Hospital ID ( if user is doctor )',
-                      suffixIcon: Icon(Icons.visibility_off),
+                      suffixIcon: Icon(Icons.add_business_rounded),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20.0),
+                        borderRadius: BorderRadius.circular(30.0),
                       ),
                     ),
                     onChanged: (value) {
@@ -159,9 +165,8 @@ class _registrationState extends State<registration> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Forget password?',
-                        style: TextStyle(fontSize: 12.0),
+                      SizedBox(
+                        width : 1.0,
                       ),
                       RaisedButton(
                         child: Text('Sign Up'),
@@ -209,7 +214,7 @@ class _registrationState extends State<registration> {
                                     "profession" : "driver",
                                     "hospital_id" : null,
                                   });
-                                  //Navigator.pushNamed(context, driver_map.id);
+                                  Navigator.pushNamed(context, MapsDemo.id);
                                 }
                                 else print("new user is null");
                               }
@@ -230,12 +235,13 @@ class _registrationState extends State<registration> {
                     Navigator.pushNamed(context, login_screen.id);
                   },
                   child: Text.rich(
-                    TextSpan(text: 'Already have an account', children: [
+                    TextSpan(text: 'Already have an account ?', children: [
                       TextSpan(
                         text: ' Sign In',
                         style: TextStyle(color: Color(0xffEE7B23)),
                       ),
                     ]),
+                    style: TextStyle(fontSize: 16.0),
                   ),
                 ),
               ],

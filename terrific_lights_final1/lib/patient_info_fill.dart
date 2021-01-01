@@ -8,38 +8,117 @@ import 'package:firebase_auth/firebase_auth.dart';
 //import 'package:terrific_lights_final1/patient_info_fill.dart';
 import 'package:terrific_lights_final1/patient_list.dart';
 import 'package:terrific_lights_final1/registration.dart';
-//import 'package:terrific_lights_final1/driver_map.dart.dart';
+
 
 class patient_info_fill extends StatefulWidget {
-  static const String id = 'patient_info_fill_screen' ;
+  static const String id = 'patient_info_fill_screen';
   @override
   _patient_info_fillState createState() => _patient_info_fillState();
 }
 
 class _patient_info_fillState extends State<patient_info_fill> {
-
   final _auth = FirebaseAuth.instance;
   final _firestore = Firestore.instance;
-  // ignore: deprecated_member_use
+
   User loggedInUser;
+  void ConfirmLogOut(BuildContext context) async{
+    var alertDialog = AlertDialog(
+      title: Text("Log Out?"),
+      content: Text("Do you want to log out?"),
+      actions: [
+        FlatButton(
+            child: Text("No"),
+            onPressed: (){
+              Navigator.pushNamed(context, patient_info_fill.id) ;
+            }
+        ),
+        FlatButton(
+            child: Text("Yes"),
+            onPressed: () async {
+              await _auth.signOut();
+              Navigator.pushNamed(context, login_screen.id) ;
+            }
+        ),
+      ],
+    );
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alertDialog;
+        }
+    );
+  }
+
+  void ConfirmSubmit(BuildContext context) async{
+    var alertDialog = AlertDialog(
+      title: Text("Submit?"),
+      content: Text("Do you want to submit?"),
+      actions: [
+        FlatButton(
+            child: Text("No"),
+            onPressed: (){
+              Navigator.pushNamed(context, patient_info_fill.id) ;
+            }
+        ),
+        FlatButton(
+            child: Text("Yes"),
+            onPressed: () async {
+              await _firestore.collection("Patient_info").add({
+                "information": Patient_Information,
+              });
+              ConfirmSubmit1(context);
+            }
+        ),
+      ],
+    );
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alertDialog;
+        }
+    );
+  }
+
+  void ConfirmSubmit1(BuildContext context) async{
+    var alertDialog = AlertDialog(
+      title: Text("Submited"),
+      content: Text("The information is submitted"),
+      actions: [
+        FlatButton(
+            child: Text("OK"),
+            onPressed: (){
+              Navigator.pushNamed(context, patient_info_fill.id) ;
+            }
+        ),
+      ],
+    );
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return alertDialog;
+        }
+    );
+  }
   @override
-  void initState(){
+  void initState() {
     super.initState();
     getCurrentUser();
   }
-  void getCurrentUser() async{
-    try{
+
+  void getCurrentUser() async {
+    try {
       final user = await _auth.currentUser;
-      if(user != null){
+      if (user != null) {
         loggedInUser = user;
         print(loggedInUser.email);
         print("congo emt nigga");
       }
-    } catch (e){
+    } catch (e) {
       print(e);
       print(";_;");
     }
   }
+
   bool checkbox1 = true;
   bool checkbox2 = false;
   String gender = 'male';
@@ -50,14 +129,23 @@ class _patient_info_fillState extends State<patient_info_fill> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Form Widgets',
+      title: 'Patient Form',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Form Widgets'),
+          title: Text('Patient Form'),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.exit_to_app),
+              tooltip: 'Log Out',
+              onPressed: () {
+                ConfirmLogOut(context);
+              },
+            ),
+          ],
         ),
         body: SingleChildScrollView(
           scrollDirection: Axis.vertical,
@@ -66,29 +154,31 @@ class _patient_info_fillState extends State<patient_info_fill> {
             child: Column(children: [
               Text(
                 'Name',
-                style : TextStyle(fontWeight: FontWeight.w500 , fontSize: 20.0),
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20.0),
               ),
               SizedBox(height: 10.0),
               TextFormField(
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
-//hintText: 'write something',
                     border: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey, width: 32.0),
                         borderRadius: BorderRadius.circular(5.0)),
                     focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey, width: 1.0),
                         borderRadius: BorderRadius.circular(5.0))),
-                onChanged: (value) {Patient_Information[0] = value;},
+                onChanged: (value) {
+                  Patient_Information[0] = value;
+                },
               ),
-              SizedBox(height: 20.0),
-              Text('EMT contact no.',
-                style : TextStyle(fontWeight: FontWeight.w500 , fontSize: 20.0),),
-              SizedBox(height: 10.0),
+              SizedBox(height: 30.0),
+              Text(
+                'EMT contact no.',
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20.0),
+              ),
+              SizedBox(height: 5.0),
               TextFormField(
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
-//hintText: 'write something',
                     border: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey, width: 32.0),
                         borderRadius: BorderRadius.circular(5.0)),
@@ -100,27 +190,32 @@ class _patient_info_fillState extends State<patient_info_fill> {
                 },
               ),
               SizedBox(
-                height: 20.0,
+                height: 30.0,
               ),
-              Text('Hospital ID',
-                style : TextStyle(fontWeight: FontWeight.w500 , fontSize: 20.0),),
-              SizedBox(height: 10.0),
+              Text(
+                'Hospital ID',
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20.0),
+              ),
+              SizedBox(height: 5.0),
               TextFormField(
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
-//hintText: 'write something',
                     border: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey, width: 32.0),
                         borderRadius: BorderRadius.circular(5.0)),
                     focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey, width: 1.0),
-                        borderRadius: BorderRadius.circular(5.0))),
-                onChanged: (value) {Patient_Information[2] = value;},
+                        borderRadius: BorderRadius.circular(20.0))),
+                onChanged: (value) {
+                  Patient_Information[2] = value;
+                },
               ),
-              SizedBox(height: 20.0),
-              Text('Gender',
-                style : TextStyle(fontWeight: FontWeight.w500 , fontSize: 20.0),),
-              SizedBox(height: 10.0),
+              SizedBox(height: 30.0),
+              Text(
+                'Gender',
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20.0),
+              ),
+              SizedBox(height: 5.0),
               Row(children: [
                 SizedBox(
                   width: 30.0,
@@ -132,7 +227,6 @@ class _patient_info_fillState extends State<patient_info_fill> {
                     groupValue: gender,
                     activeColor: Colors.orange,
                     onChanged: (value) {
-//value may be true or false
                       setState(() {
                         gender = value;
                         Patient_Information[3] = value;
@@ -150,7 +244,6 @@ class _patient_info_fillState extends State<patient_info_fill> {
                     groupValue: gender,
                     activeColor: Colors.orange,
                     onChanged: (value) {
-//value may be true or false
                       setState(() {
                         gender = value;
                         Patient_Information[3] = value;
@@ -168,7 +261,6 @@ class _patient_info_fillState extends State<patient_info_fill> {
                     groupValue: gender,
                     activeColor: Colors.orange,
                     onChanged: (value) {
-//value may be true or false
                       setState(() {
                         gender = value;
                         Patient_Information[3] = value;
@@ -180,215 +272,256 @@ class _patient_info_fillState extends State<patient_info_fill> {
                 Text('Others'),
               ]),
               SizedBox(
-                height: 20.0,
+                height: 30.0,
               ),
-              Text('Age',
-                style : TextStyle(fontWeight: FontWeight.w500 , fontSize: 20.0),),
-              SizedBox(height: 10.0),
+              Text(
+                'Age',
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20.0),
+              ),
+              SizedBox(height: 5.0),
               TextFormField(
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-//hintText: 'write something',
+
                     border: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey, width: 32.0),
                         borderRadius: BorderRadius.circular(5.0)),
                     focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.grey, width: 1.0),
-                        borderRadius: BorderRadius.circular(5.0))),
+                        borderRadius: BorderRadius.circular(10.0))),
                 onChanged: (value) {
                   Patient_Information[4] = value;
                 },
               ),
               SizedBox(
-                height: 20.0,
+                height: 30.0,
               ),
-              Text('G.C',
-                style : TextStyle(fontWeight: FontWeight.w500 , fontSize: 20.0),),
-              SizedBox(height: 10.0),
+              Text(
+                'G.C',
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20.0),
+              ),
+              SizedBox(height: 5.0),
               TextFormField(
                 keyboardType: TextInputType.text,
                 decoration: InputDecoration(
-//hintText: 'write something',
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey, width: 32.0),
-                        borderRadius: BorderRadius.circular(5.0)),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey, width: 1.0),
-                        borderRadius: BorderRadius.circular(5.0))),
-                onChanged: (value) {Patient_Information[5] = value;},
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              Text('Blood Pressure',
-                style : TextStyle(fontWeight: FontWeight.w500 , fontSize: 20.0),),
-              SizedBox(height: 10.0),
-              TextFormField(
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-//hintText: 'write something',
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey, width: 32.0),
-                        borderRadius: BorderRadius.circular(5.0)),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey, width: 1.0),
-                        borderRadius: BorderRadius.circular(5.0))),
-                onChanged: (value) {Patient_Information[6] = value;},
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              Text('Pulse Rate',
-                style : TextStyle(fontWeight: FontWeight.w500 , fontSize: 20.0),),
-              SizedBox(height: 10.0),
-              TextFormField(
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-//hintText: 'write something',
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey, width: 32.0),
-                        borderRadius: BorderRadius.circular(5.0)),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey, width: 1.0),
-                        borderRadius: BorderRadius.circular(5.0))),
-                onChanged: (value) {Patient_Information[7] = value;},
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              Text('Temperature',
-                style : TextStyle(fontWeight: FontWeight.w500 , fontSize: 20.0),),
-              SizedBox(height: 10.0),
-              TextFormField(
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-//hintText: 'write something',
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey, width: 32.0),
-                        borderRadius: BorderRadius.circular(5.0)),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey, width: 1.0),
-                        borderRadius: BorderRadius.circular(5.0))),
-                onChanged: (value) {Patient_Information[8] = value;},
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              Text('Oxygen saturation',
-                style : TextStyle(fontWeight: FontWeight.w500 , fontSize: 20.0),),
-              SizedBox(height: 10.0),
-              TextFormField(
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-//hintText: 'write something',
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey, width: 32.0),
-                        borderRadius: BorderRadius.circular(5.0)),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey, width: 1.0),
-                        borderRadius: BorderRadius.circular(5.0))),
-                onChanged: (value) {Patient_Information[9] = value;},
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              Text('Investigation',
-                style : TextStyle(fontWeight: FontWeight.w500 , fontSize: 20.0),),
-              SizedBox(height: 10.0),
-              Text('a. RBS',
-                style : TextStyle(fontWeight: FontWeight.w400 , fontSize: 15.0),),
-              SizedBox(height: 10.0),
-              TextFormField(
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                    //hintText: 'write something',
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey, width: 32.0),
-                        borderRadius: BorderRadius.circular(5.0)),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey, width: 1.0),
-                        borderRadius: BorderRadius.circular(5.0))),
-                onChanged: (value) {Patient_Information[10] = value;},
-              ),
-              SizedBox(height: 10.0),
-              Text('b. LFT',style : TextStyle(fontWeight: FontWeight.w400 , fontSize: 15.0),),
-              SizedBox(height: 10.0),
-              TextFormField(
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                    //hintText: 'write something',
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey, width: 32.0),
-                        borderRadius: BorderRadius.circular(5.0)),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey, width: 1.0),
-                        borderRadius: BorderRadius.circular(5.0))),
-                onChanged: (value) {Patient_Information[11] = value;},
-              ),
-              SizedBox(height: 10.0),
-              Text('c. RFT',style : TextStyle(fontWeight: FontWeight.w400 , fontSize: 15.0),),
-              SizedBox(height: 10.0),
-              TextFormField(
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-//hintText: 'write something',
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey, width: 32.0),
-                        borderRadius: BorderRadius.circular(5.0)),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey, width: 1.0),
-                        borderRadius: BorderRadius.circular(5.0))),
-                onChanged: (value) {Patient_Information[12] = value;},
-              ),
-              SizedBox(height: 10.0),
-              Text('d. CBP',style : TextStyle(fontWeight: FontWeight.w400 , fontSize: 15.0),),
-              SizedBox(height: 10.0),
-              TextFormField(
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-//hintText: 'write something',
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey, width: 32.0),
-                        borderRadius: BorderRadius.circular(5.0)),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey, width: 1.0),
-                        borderRadius: BorderRadius.circular(5.0))),
-                onChanged: (value) {Patient_Information[13] = value;},
-              ),
-              SizedBox(
-                height: 20.0,
-              ),
-              Text('Any H/O : ',
-                style : TextStyle(fontWeight: FontWeight.w500 , fontSize: 20.0),),
-              SizedBox(height: 10.0),
-              TextFormField(
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-//hintText: 'write something',
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey, width: 32.0),
-                        borderRadius: BorderRadius.circular(5.0)),
-                    focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey, width: 1.0),
-                        borderRadius: BorderRadius.circular(5.0))),
-                onChanged: (value) {Patient_Information[14] = value;},
-              ),
-//Text('Buttons'),
-              SizedBox(height: 10.0),
 
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey, width: 32.0),
+                        borderRadius: BorderRadius.circular(5.0)),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                        borderRadius: BorderRadius.circular(10.0))),
+                onChanged: (value) {
+                  Patient_Information[5] = value;
+                },
+              ),
+              SizedBox(
+                height: 30.0,
+              ),
+              Text(
+                'Blood Pressure',
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20.0),
+              ),
+              SizedBox(height: 5.0),
+              TextFormField(
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey, width: 32.0),
+                        borderRadius: BorderRadius.circular(5.0)),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                        borderRadius: BorderRadius.circular(10.0))),
+                onChanged: (value) {
+                  Patient_Information[6] = value;
+                },
+              ),
+              SizedBox(
+                height: 30.0,
+              ),
+              Text(
+                'Pulse Rate',
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20.0),
+              ),
+              SizedBox(height: 5.0),
+              TextFormField(
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey, width: 32.0),
+                        borderRadius: BorderRadius.circular(5.0)),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                        borderRadius: BorderRadius.circular(10.0))),
+                onChanged: (value) {
+                  Patient_Information[7] = value;
+                },
+              ),
+              SizedBox(
+                height: 30.0,
+              ),
+              Text(
+                'Temperature',
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20.0),
+              ),
+              SizedBox(height: 5.0),
+              TextFormField(
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey, width: 32.0),
+                        borderRadius: BorderRadius.circular(5.0)),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                        borderRadius: BorderRadius.circular(10.0))),
+                onChanged: (value) {
+                  Patient_Information[8] = value;
+                },
+              ),
+              SizedBox(
+                height: 30.0,
+              ),
+              Text(
+                'Oxygen saturation',
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20.0),
+              ),
+              SizedBox(height: 5.0),
+              TextFormField(
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey, width: 32.0),
+                        borderRadius: BorderRadius.circular(5.0)),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                        borderRadius: BorderRadius.circular(10.0))),
+                onChanged: (value) {
+                  Patient_Information[9] = value;
+                },
+              ),
+              SizedBox(
+                height: 30.0,
+              ),
+              Text(
+                'Investigation',
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20.0),
+              ),
+              SizedBox(height: 5.0),
+              Text(
+                'a. RBS',
+                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 15.0),
+              ),
+              SizedBox(height: 10.0),
+              TextFormField(
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey, width: 32.0),
+                        borderRadius: BorderRadius.circular(5.0)),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                        borderRadius: BorderRadius.circular(10.0))),
+                onChanged: (value) {
+                  Patient_Information[10] = value;
+                },
+              ),
+              SizedBox(height: 10.0),
+              Text(
+                'b. LFT',
+                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 15.0),
+              ),
+              SizedBox(height: 10.0),
+              TextFormField(
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey, width: 32.0),
+                        borderRadius: BorderRadius.circular(5.0)),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                        borderRadius: BorderRadius.circular(10.0))),
+                onChanged: (value) {
+                  Patient_Information[11] = value;
+                },
+              ),
+              SizedBox(height: 10.0),
+              Text(
+                'c. RFT',
+                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 15.0),
+              ),
+              SizedBox(height: 10.0),
+              TextFormField(
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey, width: 32.0),
+                        borderRadius: BorderRadius.circular(5.0)),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                        borderRadius: BorderRadius.circular(10.0))),
+                onChanged: (value) {
+                  Patient_Information[12] = value;
+                },
+              ),
+              SizedBox(height: 10.0),
+              Text(
+                'd. CBP',
+                style: TextStyle(fontWeight: FontWeight.w400, fontSize: 15.0),
+              ),
+              SizedBox(height: 10.0),
+              TextFormField(
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey, width: 32.0),
+                        borderRadius: BorderRadius.circular(5.0)),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                        borderRadius: BorderRadius.circular(10.0))),
+                onChanged: (value) {
+                  Patient_Information[13] = value;
+                },
+              ),
+              SizedBox(
+                height: 30.0,
+              ),
+              Text(
+                'Any H/O : ',
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 20.0),
+              ),
+              SizedBox(height: 5.0),
+              TextFormField(
+                keyboardType: TextInputType.text,
+                decoration: InputDecoration(
+
+                    border: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey, width: 32.0),
+                        borderRadius: BorderRadius.circular(5.0)),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.grey, width: 1.0),
+                        borderRadius: BorderRadius.circular(10.0))),
+                onChanged: (value) {
+                  Patient_Information[14] = value;
+                },
+              ),
+
+              SizedBox(height: 10.0),
 
               RaisedButton(
                 color: Colors.orange,
                 child: Text('Submit', style: TextStyle(color: Colors.white)),
-                onPressed: () {
-                  print(Patient_Information);
-                  _firestore.collection("Patient_info").add({
-                    "information" : Patient_Information,
-                  });
+                onPressed: () async{
+                  ConfirmSubmit(context);
                 },
               ),
-
-
             ]),
           ),
         ),
@@ -396,5 +529,3 @@ class _patient_info_fillState extends State<patient_info_fill> {
     );
   }
 }
-
-
