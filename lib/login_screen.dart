@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:terrific_lights_final1/patient_info_fill.dart';
 import 'package:terrific_lights_final1/patient_list.dart';
 import 'package:terrific_lights_final1/registration.dart';
-import 'package:terrific_lights_final1/MapsDemo.dart';
+//import 'package:terrific_lights_final1/MapsDemo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class login_screen extends StatefulWidget {
@@ -128,10 +128,10 @@ class _login_screenState extends State<login_screen> {
                                               Navigator.pushNamed(
                                                   context, patient_info_fill.id);
                                             }
-                                            else if (message.data()["profession"] ==
-                                                "driver"){
-                                              Navigator.pushNamed(context, MapsDemo.id);
-                                            }
+                                            // else if (message.data()["profession"] ==
+                                            //     "driver"){
+                                            //   Navigator.pushNamed(context, MapsDemo.id);
+                                            // }
                                             break;
                                           }
                                         }

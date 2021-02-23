@@ -4,7 +4,7 @@ import 'package:terrific_lights_final1/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:terrific_lights_final1/patient_info_fill.dart';
 import 'package:terrific_lights_final1/patient_list.dart';
-import 'package:terrific_lights_final1/MapsDemo.dart';
+//import 'package:terrific_lights_final1/MapsDemo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 class registration extends StatefulWidget {
   static const String id = 'registration_screen';
@@ -81,15 +81,15 @@ class _registrationState extends State<registration> {
                     setSelectedRadio(val);
                   },
                 ),
-                RadioListTile(
-                  value: 3,
-                  groupValue: selectedRadio,
-                  title: Text("Driver", style: TextStyle(fontSize: 19.0)),
-                  activeColor: Colors.red,
-                  onChanged: (val) {
-                    setSelectedRadio(val);
-                  },
-                ),
+                // RadioListTile(
+                //   value: 3,
+                //   groupValue: selectedRadio,
+                //   title: Text("Driver", style: TextStyle(fontSize: 19.0)),
+                //   activeColor: Colors.red,
+                //   onChanged: (val) {
+                //     setSelectedRadio(val);
+                //   },
+                // ),
                 SizedBox(
                   height: 30.0,
                 ),
@@ -204,20 +204,21 @@ class _registrationState extends State<registration> {
                                   Navigator.pushNamed(context, patient_info_fill.id);
                                 }
                                 else print("new user is null");
-                              } else if (selectedRadio == 3) {
-                                final new_user =
-                                    await _auth.createUserWithEmailAndPassword(
-                                        email: email, password: password);
-                                if (new_user != null) {
-                                  _firestore.collection("Authentication").add({
-                                    "email" : email,
-                                    "profession" : "driver",
-                                    "hospital_id" : null,
-                                  });
-                                  Navigator.pushNamed(context, MapsDemo.id);
-                                }
-                                else print("new user is null");
                               }
+                              // else if (selectedRadio == 3) {
+                              //   final new_user =
+                              //       await _auth.createUserWithEmailAndPassword(
+                              //           email: email, password: password);
+                              //   if (new_user != null) {
+                              //     _firestore.collection("Authentication").add({
+                              //       "email" : email,
+                              //       "profession" : "driver",
+                              //       "hospital_id" : null,
+                              //     });
+                              //     Navigator.pushNamed(context, MapsDemo.id);
+                              //   }
+                              //   else print("new user is null");
+                              // }
                             } else
                               print("passwords do not match");
                           } catch (e) {
